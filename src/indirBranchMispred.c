@@ -3,10 +3,11 @@
 #include "encoding.h"
 #include "cache.h"
 
-#define TRAIN_TIMES 6 // assumption is that you have a 2 bit counter in the predictor
+//#define TRAIN_TIMES 6 // assumption is that you have a 2 bit counter in the predictor
+#define TRAIN_TIMES 40 // assumption is that you have a 3 bit counter in the predictor
 #define ROUNDS 1 // run the train + attack sequence X amount of times (for redundancy)
 #define ATTACK_SAME_ROUNDS 10 // amount of times to attack the same index
-#define SECRET_SZ 26
+#define SECRET_SZ 31
 #define CACHE_HIT_THRESHOLD 50
 
 uint64_t array1_sz = 16;
@@ -14,7 +15,7 @@ uint8_t unused1[64];
 uint8_t array1[160] = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16};
 uint8_t unused2[64];
 uint8_t array2[256 * L1_BLOCK_SZ_BYTES];
-char* secretString = "!\"#ThisIsTheBabyBoomerTest";
+char* secretString = "!\"#ThisIsTheBabySonicBoomerTest";
 
 /**
  * reads in inArray array (and corresponding size) and outIdxArrays top two idx's (and their
@@ -100,7 +101,7 @@ int main(void){
                 passInIdx = randIdx ^ (passInIdx & (attackIdx ^ randIdx)); // select randIdx or attackIdx 
 
                 // set of constant takens to make the BHR be in a all taken state
-                for(uint64_t k = 0; k < 30; ++k){
+                for(uint64_t k = 0; k < 100; ++k){
                     asm("");
                 }
 
