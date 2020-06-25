@@ -3,8 +3,15 @@
 #include "cache.h"
 #include "encoding.h"
 
-#define ATTACK_SAME_ROUNDS 10 // amount of times to attack the same index
+// amount of times to attack the same index
+// Also, works with 1 time attack but the more times you repeat the more 
+// chance you may get all characters, ofcourse this slows-down the attack
+#define ATTACK_SAME_ROUNDS 5 
+
+// The number of characters in the secret string
 #define SECRET_SZ 31
+
+// The cache hit threshold, ~50 cycles should be OK for all SonicBoom configs
 #define CACHE_HIT_THRESHOLD 50
 
 uint8_t attackArray[256 * L1_BLOCK_SZ_BYTES];
